@@ -12,9 +12,11 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.engine('handlebars', handlebars.engine())
 
+app.set("view engine", "handlebars");
+
 app.use(express.json())
 
-const db = mysql.createPool({
+const db = mysql2.createPool({
     host: "localhost",
     user: "aluno_medio",
     password: "@lunoSenai23.",
@@ -22,10 +24,10 @@ const db = mysql.createPool({
 })
 
 
-app.post("/cadastrar", (req, res) => {
-    const { name, description, price } = req.body
+app.post("/books/insertbook", (req, res) => {
+    const { title, num_pag } = req.body
 
-    const inserirMysql = `INSERT INTO products (name, description, price) VALUES ('${name}, '${description}', '${price}')` 
+    const inserirMysql = `INSERT INTO books (title, num_pag) VALUES ( '${title}', '${num_pag}')` 
 
     db.query(inserirMysql, (error) => {
         if(error){
@@ -69,7 +71,7 @@ app.put("/produtos/:id", (request, response) => {
 });
 
 app.get("/", (req, res) => {
-    res.render('formulario')
+    res.render('home')
 })
 
 app.listen(port, (error) => {
