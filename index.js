@@ -4,7 +4,9 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const port = 3000
 const handlebars = require('express-handlebars')
-const mysql2 = require('mysql2')
+const mysql2 = require('mysql2');
+const { Connection } = require('mysql2/typings/mysql/lib/Connection');
+const { response } = require('express');
 
 app.use(express.static(path.join(__dirname, "public")))
 
@@ -80,4 +82,14 @@ app.listen(port, (error) => {
         return
     }
     console.log(`Servidor rodando na porta${port} 😍`)
+})
+
+app.get("/books", (req, res) => {
+    const sql = "SELECT * FROM books"
+    Connection.query(sql, (error) =>{
+        if(error){
+            console.log(error);
+        }
+        return res.render('books', {books})
+    })
 })
